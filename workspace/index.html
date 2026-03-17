@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>StardewLocalAPI – Developer Toolkit</title>
+    <link rel="stylesheet" href="./app/app.css" />
+    <!---<i<link rel="icon" type="image/png" href="/app/assets/Icon.png">-->
+</head>
+    <body class="sv-theme">
+        <header class="app-header">
+            <div class="brand brand-row">
+                <!---<img class="brand-icon" src="./app/assets/icon.png" alt="Stardew Local API" />-->
+    <div class="brand-text">
+        <div class="brand-title">Stardew Local API</div>
+        <div class="brand-sub">Developer Tools</div>
+    </div>
+    </div>
+
+    <div class="spacer"></div>
+    </header>
+
+    <div class="app-shell">
+        <aside class="app-nav">
+            <div class="nav-title">Project</div>
+
+            <div class="project-current-wrap">
+                <div class="project-current-label">Current Project</div>
+                <div id="projectName" class="project-current-name">No project loaded</div>
+                <div id="projectMeta" class="project-current-meta muted small">—</div>
+            </div>
+
+            <div id="projectActions" class="project-actions-nav">
+                <button id="btnProjectNew" class="nav-link project-nav-btn" type="button">
+                    <span class="nav-emoji">📁</span>
+                    <span>New Project</span>
+                </button>
+
+                <button id="btnProjectLoad" class="nav-link project-nav-btn" type="button">
+                    <span class="nav-emoji">📂</span>
+                    <span>Load Project</span>
+                </button>
+
+                <button id="btnProjectSave" class="nav-link project-nav-btn" type="button">
+                    <span class="nav-emoji">💾</span>
+                    <span>Save Project</span>
+                </button>
+
+                <button id="btnProjectSaveAs" class="nav-link project-nav-btn" type="button">
+                    <span class="nav-emoji">📝</span>
+                    <span>Save Project As</span>
+                </button>
+            </div>
+
+            <div class="hr"></div>
+
+            <div class="nav-title">Tools</div>
+            <nav id="nav"></nav>
+        </aside>
+
+        <main class="app-main">
+            <div id="toolHost" class="tool-host"></div>
+        </main>
+        <button id="backToTopBtn" class="back-to-top" type="button" aria-label="Back to top" title="Back to top">
+            ↑
+        </button>
+    </div>
+
+   <footer class="app-footer">
+        <div class="muted small" id="footerLeft"> </div>
+        <div class="muted small" id="footerRight"> </div>
+    </footer>
+
+    <div id="toastHost" class="toast-host" aria-live="polite" aria-atomic="true"></div>
+    <div id="appModalHost"></div>
+
+    <script type="module" src="./app/app.js"></script>
+    </body>
+</html>

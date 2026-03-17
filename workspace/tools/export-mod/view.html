@@ -1,0 +1,80 @@
+<div id="exportMod" class="tool-host">
+    <div class="card" style="margin-top:12px;">
+        <div class="card-hdr">Export Mod</div>
+        <div class="card-body">
+            <div class="muted small" style="margin-bottom:10px;">
+                Build a combined Content Patcher preview for the current project.
+                This exports all Event Builder events saved in the loaded project and includes the same
+                <code>manifest.json</code> stored by Event Builder.
+            </div>
+
+            <div class="row" style="gap:10px; align-items:end;">
+                <div class="field" style="min-width:240px;">
+                    <label>Patch Mode</label>
+                    <select id="xmPatchMode" class="select">
+                        <option value="edit">EditData (existing asset)</option>
+                        <option value="load">Load (create new asset)</option>
+                    </select>
+                </div>
+
+                <label class="row" style="gap:6px; align-items:center; margin-right:4px; white-space:nowrap; cursor:pointer;">
+                    <input id="xmI18nToggle" type="checkbox" />
+                    <span class="small">I18N</span>
+                </label>
+
+                <button id="xmBtnBuild" class="btn primary" type="button">Build Preview</button>
+                <button id="xmBtnCopy" class="btn" type="button">Copy</button>
+                <button id="xmBtnDownload" class="btn" type="button">Download</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card" style="margin-top:12px;">
+        <div class="card-hdr">manifest.json</div>
+        <div class="card-body">
+            <div class="muted small" style="margin-bottom:10px;">
+                This uses the current project manifest saved from Event Builder.
+            </div>
+
+            <div class="row" style="gap:10px; align-items:center; margin-bottom:10px;">
+                <span id="xmManifestStatus" class="pill" title="Manifest status">UniqueID: —</span>
+            </div>
+
+            <textarea id="xmOutputManifest" class="text" spellcheck="false"
+                      style="display:block; min-height:220px; width:100%; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace;"></textarea>
+        </div>
+    </div>
+
+    <div class="card" style="margin-top:12px;">
+        <div class="card-hdr">Included Event Builder Events</div>
+        <div class="card-body">
+            <div class="muted small" style="margin-bottom:10px;">
+                These are the current Event Builder documents found in the loaded project.
+            </div>
+            <div id="xmEventSummary" class="list"></div>
+        </div>
+    </div>
+
+    <div class="card" style="margin-top:12px;">
+        <div class="card-hdr">Preview Output</div>
+        <div class="card-body">
+            <div style="margin-top:4px;">
+                <label class="small" style="display:block; font-weight:800; margin-bottom:6px;">content.json</label>
+                <textarea id="xmOutputContent" class="text" spellcheck="false"
+                          style="display:block; min-height:220px; width:100%; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace;"></textarea>
+            </div>
+
+            <div style="margin-top:12px;">
+                <label class="small" style="display:block; font-weight:800; margin-bottom:6px;">assets/data/events/events.json</label>
+                <textarea id="xmOutputEvents" class="text" spellcheck="false"
+                          style="display:block; min-height:260px; width:100%; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace;"></textarea>
+            </div>
+
+            <div style="margin-top:12px;">
+                <label id="xmI18nLabel" class="small" style="display:none; font-weight:800; margin-bottom:6px;">i18n/default.json</label>
+                <textarea id="xmOutputI18n" class="text" spellcheck="false"
+                          style="display:none; min-height:220px; width:100%; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace;"></textarea>
+            </div>
+        </div>
+    </div>
+</div>

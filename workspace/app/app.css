@@ -1,0 +1,1447 @@
+﻿/* ==========================================================
+   StardewLocalAPI – App CSS
+   ========================================================== */
+
+/* =========================
+   Theme tokens
+   ========================= */
+:root {
+	--sv-text: #2b1a10;
+	--sv-muted: #5c4636;
+	--sv-ink: rgba(30,18,10,.35);
+	--sv-paper: #f6edd7;
+	--sv-paper2: #efe0bf;
+	--sv-woodA: #d3a56f;
+	--sv-woodB: #b9824d;
+	--sv-woodRimDark: #8d5a33;
+	--sv-woodRimLight: #caa06a;
+	--sv-accent: #2f7e45;
+	--sv-warn: #b07a2d;
+	--sv-bad: #b03a2e;
+	--sv-radius: 18px;
+	--sv-radius2: 14px;
+	--sv-shadow: 0 12px 28px rgba(0,0,0,.25);
+	--panelA: .30;
+	--panelB: .30;
+	--woodA: .30;
+	--appMax: 1600px;
+	--navW: 260px;
+	font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+	--muted: var(--sv-muted);
+	--border: rgba(60,35,20,.35);
+}
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0;
+	color: var(--sv-text);
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+
+	/* Background image + overlay (only when enabled) */
+	body.sv-theme {
+		background-image: url("./assets/background.jpg");
+		background-size: cover;
+		background-position: center top;
+		background-attachment: fixed;
+		min-height: 100vh;
+	}
+
+		body.sv-theme::before {
+			content: "";
+			position: fixed;
+			inset: 0;
+			background: linear-gradient(rgba(0,0,0,.10), rgba(0,0,0,.22));
+			pointer-events: none;
+			z-index: 0;
+		}
+
+/* Make app sit above overlay */
+.app-header,
+.app-shell,
+.app-footer,
+.toast-host {
+	position: relative;
+	z-index: 1;
+}
+
+code {
+	font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace;
+}
+
+/* =========================
+   Header
+   ========================= */
+.app-header {
+	position: sticky;
+	top: 0;
+	z-index: 50;
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 6px 14px;
+	min-height: 52px;
+	border-bottom: 4px solid rgba(60,35,20,.55);
+	background: linear-gradient(180deg, rgba(255,255,255,.22), rgba(255,255,255,0)), linear-gradient(180deg, var(--sv-woodA), var(--sv-woodB));
+	box-shadow: 0 6px 0 rgba(0,0,0,.12);
+}
+
+.brand-row {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+.brand-icon {
+	width: 40px;
+	height: 40px;
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	background-position: center;
+	image-rendering: pixelated;
+}
+
+.brand-text {
+	display: flex;
+	align-items: baseline;
+	gap: 10px;
+}
+
+.brand-title {
+	font-size: 18px;
+	font-weight: 900;
+	letter-spacing: .2px;
+	margin: 0;
+	color: var(--sv-text);
+	text-shadow: 0 1px 0 rgba(255,255,255,.35);
+}
+
+.brand-sub {
+	font-size: 13px;
+	margin: 0;
+	opacity: .75;
+	color: rgba(43,26,16,.75);
+}
+
+.spacer {
+	flex: 1 1 auto;
+}
+
+/* =========================
+   Controls / Inputs / Buttons
+   ========================= */
+.lbl {
+	font-size: 12px;
+	color: rgba(43,26,16,.80);
+	text-shadow: 0 1px 0 rgba(255,255,255,.25);
+}
+
+/* =========================
+   Global Tooltip
+   ========================= */
+.tooltip-wrap {
+	position: relative;
+	display: inline-block;
+	overflow: visible !important;
+}
+
+.tooltip {
+	position: fixed;
+	left: 0;
+	top: 0;
+	min-width: 220px;
+	max-width: 320px;
+	padding: 10px 12px;
+	border-radius: 8px;
+	background: #2a211b;
+	color: #f6e7c9;
+	font-size: 13px;
+	line-height: 1.4;
+	text-align: left;
+	white-space: normal;
+	border: 1px solid rgba(255,255,255,.08);
+	box-shadow: 0 6px 18px rgba(0,0,0,.35);
+	opacity: 0;
+	visibility: hidden;
+	pointer-events: none;
+	transition: opacity .12s ease, visibility .12s ease;
+	z-index: 2147483647;
+}
+
+.tooltip-wrap:hover .tooltip {
+	opacity: 1;
+	visibility: visible;
+}
+
+.tooltip::before {
+	content: "";
+	position: absolute;
+	bottom: 100%;
+	left: 50%;
+	transform: translateX(-50%);
+	border-width: 6px;
+	border-style: solid;
+	border-color: transparent transparent #2a211b transparent;
+}
+
+.has-tooltip-layer,
+.has-tooltip-layer .card,
+.has-tooltip-layer .card-body,
+.has-tooltip-layer .row,
+.has-tooltip-layer .field {
+	overflow: visible !important;
+}
+
+/* ============ Base field inputs (general app) =========== */
+.inp,
+.select,
+.text,
+.num {
+	width: 260px;
+	background: linear-gradient(180deg, var(--sv-paper), var(--sv-paper2));
+	border: 2px solid rgba(60,35,20,.45);
+	color: var(--sv-text);
+	border-radius: 10px;
+	padding: 7px 9px;
+	font-size: 13px;
+	box-shadow: inset 0 1px 0 rgba(255,255,255,.65);
+}
+
+.btn {
+	border: 2px solid rgba(60,35,20,.50);
+	background: linear-gradient(180deg, rgba(255,255,255,.25), rgba(255,255,255,0)), linear-gradient(180deg, var(--sv-woodA), var(--sv-woodB));
+	color: var(--sv-text);
+	padding: 7px 10px;
+	border-radius: 10px;
+	cursor: pointer;
+	box-shadow: 0 3px 0 rgba(0,0,0,.18);
+	line-height: 1.1;
+}
+
+	.btn:hover {
+		filter: brightness(1.03);
+	}
+
+	.btn:active {
+		transform: translateY(1px);
+		box-shadow: 0 2px 0 rgba(0,0,0,.16);
+	}
+
+	.btn:disabled {
+		opacity: .6;
+		cursor: not-allowed;
+	}
+
+	.btn.primary {
+		border-color: rgba(25,70,35,.55);
+		background: linear-gradient(180deg, rgba(255,255,255,.20), rgba(255,255,255,0)), linear-gradient(180deg, #58b06b, var(--sv-accent));
+		color: #0d2a14;
+	}
+
+/* Pills */
+.pill {
+	font-size: 12px;
+	padding: 6px 10px;
+	border-radius: 999px;
+	border: 2px solid rgba(60,35,20,.40);
+	background: linear-gradient(180deg, var(--sv-paper), var(--sv-paper2));
+	box-shadow: inset 0 1px 0 rgba(255,255,255,.65);
+	align-self: center;
+	margin-bottom: 4px;
+}
+
+	.pill.ok {
+		border-color: rgba(25,70,35,.55);
+		color: var(--sv-accent);
+		font-weight: 800;
+	}
+
+	.pill.warn {
+		border-color: rgba(120,75,25,.55);
+		color: var(--sv-warn);
+		font-weight: 800;
+	}
+
+	.pill.bad {
+		border-color: rgba(120,30,20,.55);
+		color: var(--sv-bad);
+		font-weight: 800;
+	}
+
+.small {
+	font-size: 12px;
+}
+
+.muted {
+	color: rgba(43,26,16,.75);
+}
+
+/* =========================
+   Layout
+   ========================= */
+.app-shell {
+	display: grid;
+	grid-template-columns: var(--navW) 1fr;
+	align-items: start;
+	flex: 1 1 auto;
+	min-height: 0;
+}
+
+.app-main {
+	padding: 14px 16px 28px;
+	min-width: 0;
+}
+
+.tool-host {
+	max-width: var(--appMax);
+	margin: 0 auto;
+}
+
+/* =========================
+   Left nav
+   ========================= */
+.app-nav {
+	padding: 12px;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	border-radius: var(--sv-radius2);
+	margin: 14px 0 14px 14px;
+	background: linear-gradient(180deg, rgba(255,255,255,.18), rgba(255,255,255,var(--woodA))), linear-gradient(180deg, rgba(211,165,111,var(--woodA)), rgba(185,130,77,var(--woodA)));
+	border: 3px solid rgba(60,35,20,.50);
+	box-shadow: var(--sv-shadow);
+}
+
+.nav-title {
+	font-weight: 900;
+	letter-spacing: .2px;
+	margin-bottom: 4px;
+	color: var(--sv-text);
+	text-shadow: 0 1px 0 rgba(255,255,255,.35);
+}
+
+#nav {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.nav-link {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 8px 10px;
+	border-radius: 12px;
+	background: linear-gradient(180deg, rgba(246,237,215,.70), rgba(239,224,191,.70));
+	border: 2px solid rgba(60,35,20,.25);
+	color: var(--sv-text);
+	text-decoration: none;
+	box-shadow: inset 0 1px 0 rgba(255,255,255,.65);
+	transition: transform .12s ease, border-color .12s ease;
+}
+
+	.nav-link:hover {
+		transform: translateY(-1px);
+		border-color: rgba(60,35,20,.40);
+	}
+
+	.nav-link.active {
+		border-color: rgba(25,70,35,.55);
+		box-shadow: inset 0 1px 0 rgba(255,255,255,.65), 0 0 0 2px rgba(47,126,69,.18);
+	}
+
+.nav-emoji {
+	width: 18px;
+	text-align: center;
+	opacity: .95;
+}
+
+/* =========================
+   Cards
+   ========================= */
+.card {
+	border-radius: var(--sv-radius);
+	overflow: hidden;
+	box-shadow: 0 0 0 6px var(--sv-woodRimDark), 0 0 0 10px var(--sv-woodRimLight), 0 12px 28px rgba(0,0,0,.25);
+	background: linear-gradient(180deg, rgba(246,237,215,var(--panelA)), rgba(239,224,191,var(--panelA)));
+}
+
+.card-hdr {
+	padding: 12px 14px;
+	font-weight: 900;
+	font-size: 16px;
+	background: linear-gradient(180deg, var(--sv-woodA), var(--sv-woodB));
+	color: var(--sv-text);
+	border-bottom: 4px solid var(--sv-woodRimDark);
+	text-shadow: 0 1px 0 rgba(255,255,255,.35);
+}
+
+.card-body {
+	padding: 12px 14px;
+	background: linear-gradient(180deg, rgba(246,237,215,var(--panelB)), rgba(239,224,191,var(--panelB)));
+	color: var(--sv-text);
+}
+
+.row {
+	display: flex;
+	gap: 10px;
+	flex-wrap: wrap;
+	align-items: center;
+}
+
+.field {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	min-width: 180px;
+}
+
+	.field.grow {
+		flex: 1 1 260px;
+	}
+
+.hr {
+	height: 2px;
+	background: rgba(60,35,20,.25);
+	margin: 12px 0;
+	border-radius: 999px;
+}
+
+/* =========================
+   Footer
+   ========================= */
+.app-footer {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 0px;
+	padding: 10px 14px;
+	min-height: 44px;
+	border-top: 4px solid rgba(60,35,20,.55);
+	background: linear-gradient(180deg, rgba(255,255,255,.22), rgba(255,255,255,0)), linear-gradient(180deg, var(--sv-woodA), var(--sv-woodB));
+	color: rgba(43,26,16,.85);
+	box-shadow: 0 -6px 0 rgba(0,0,0,.10);
+}
+
+/* =========================
+   Toasts
+   ========================= */
+.toast-host {
+	position: fixed;
+	right: 14px;
+	bottom: 14px;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	z-index: 200;
+}
+
+.toast {
+	width: min(420px, calc(100vw - 28px));
+	border-radius: 14px;
+	padding: 10px 12px;
+	background: linear-gradient(180deg, rgba(246,237,215,.92), rgba(239,224,191,.92));
+	border: 2px solid rgba(60,35,20,.45);
+	box-shadow: var(--sv-shadow);
+}
+
+	.toast .t-title {
+		font-weight: 900;
+		margin-bottom: 4px;
+	}
+
+	.toast .t-body {
+		color: rgba(43,26,16,.75);
+		font-size: 13px;
+		line-height: 1.25rem;
+	}
+
+/* =========================
+   Responsive
+   ========================= */
+@media (max-width: 920px) {
+	.app-shell {
+		grid-template-columns: 1fr;
+	}
+
+	.app-nav {
+		margin: 14px;
+		max-height: none;
+	}
+
+	.inp,
+	.select,
+	.text,
+	.num {
+		width: 100%;
+		min-width: 220px;
+	}
+}
+
+/* ==========================================================
+   Home: Tools overview table
+   ========================================================== */
+.home-table {
+	width: 100%;
+	border-collapse: collapse;
+	min-width: 860px;
+}
+
+	.home-table thead th {
+		text-align: left;
+		font-size: 12px;
+		color: rgba(43,26,16,.75);
+		background: rgba(255,255,255,.20);
+		border-bottom: 2px solid rgba(60,35,20,.25);
+		padding: 10px 12px;
+		white-space: nowrap;
+	}
+
+	.home-table tbody td {
+		padding: 12px 12px;
+		border-bottom: 1px solid rgba(60,35,20,.18);
+		vertical-align: top;
+	}
+
+	.home-table tbody tr:hover {
+		background: rgba(47,126,69,.10);
+	}
+
+	.home-table .center {
+		text-align: center;
+		font-size: 18px;
+	}
+
+/* ==========================================================
+   Shared tool list-cards (EventPlayer / DialoguePlayer / MusicPlayer)
+   ========================================================== */
+#epList .list-card,
+#dpList .list-card,
+#mpList .list-card {
+	margin: 10px 0;
+	padding: 12px 14px;
+	border-radius: 12px;
+	transition: background .15s ease, border-color .15s ease;
+}
+
+	#epList .list-card:nth-child(odd),
+	#dpList .list-card:nth-child(odd),
+	#mpList .list-card:nth-child(odd) {
+		background: rgba(255,255,255,0.10);
+	}
+
+	#epList .list-card:nth-child(even),
+	#dpList .list-card:nth-child(even),
+	#mpList .list-card:nth-child(even) {
+		background: rgba(255,255,255,0.18);
+	}
+
+	#epList .list-card:hover,
+	#dpList .list-card:hover,
+	#mpList .list-card:hover {
+		background: rgba(47,126,69,0.10);
+		border-color: rgba(47,126,69,0.20);
+	}
+
+.location-row.is-empty {
+	opacity: .45;
+	filter: grayscale(1);
+}
+
+	.location-row.is-empty .count {
+		font-weight: 600;
+	}
+
+/* ==========================================================
+   Event Builder (scoped)
+   ========================================================== */
+
+/* Sticky bar */
+#eventBuilder .eb-sticky {
+	position: sticky;
+	top: var(--appHeaderH, 72px);
+	z-index: 40;
+}
+
+/* Section collapse caret */
+#eventBuilder .card-hdr {
+	cursor: pointer;
+	user-select: none;
+	position: relative;
+	padding-right: 34px;
+}
+
+	#eventBuilder .card-hdr::after {
+		content: "▾";
+		position: absolute;
+		right: 12px;
+		top: 50%;
+		transform: translateY(-50%);
+		opacity: .75;
+		font-size: 14px;
+	}
+
+#eventBuilder .card[data-collapsed="true"] > .card-hdr::after {
+	content: "▸";
+}
+
+#eventBuilder .card[data-collapsed="true"] > .card-body {
+	display: none;
+}
+
+/* EB row behavior */
+#eventBuilder .row.eb-row {
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px 10px;
+}
+
+/* Compact rows inside EB cards */
+#eventBuilder .eb-row-compact {
+	align-items: center !important;
+	gap: 4px 6px !important;
+	flex-wrap: nowrap !important;
+}
+
+	#eventBuilder .eb-row-compact .field {
+		flex-direction: row;
+		align-items: center;
+		gap: 4px;
+		margin: 0;
+		min-width: 0;
+		flex: 0 1 auto;
+	}
+
+		#eventBuilder .eb-row-compact .field > label {
+			margin: 0;
+			white-space: nowrap;
+			opacity: .85;
+			font-size: 11px;
+			line-height: 1;
+		}
+
+	#eventBuilder .eb-row-compact input.text,
+	#eventBuilder .eb-row-compact input.num,
+	#eventBuilder .eb-row-compact select.select {
+		height: 26px;
+		padding: 4px 6px;
+		font-size: 12px;
+		width: 10ch;
+		max-width: 10ch;
+		min-width: 0;
+	}
+
+	#eventBuilder .eb-row-compact .field.grow {
+		flex: 1 1 220px;
+		min-width: 140px;
+	}
+	#eventBuilder .eb-row-compact .field.eb-cmd-text-field {
+		flex: 1 1 420px;
+		min-width: 320px;
+		align-self: stretch;
+	}
+
+	#eventBuilder .eb-row-compact textarea.eb-cmd-textarea {
+		width: 100%;
+		max-width: 100%;
+		min-width: 0;
+		min-height: 60px;
+		height: 60px;
+		padding: 6px 8px;
+		font-size: 12px;
+		line-height: 1.35;
+		resize: vertical;
+		overflow-y: hidden;
+		white-space: pre-wrap;
+		word-break: break-word;
+	}
+
+#eventBuilder .eb-cmd-card .eb-row.eb-row-compact:has(textarea.eb-cmd-textarea) {
+	align-items: flex-start !important;
+	flex-wrap: wrap !important;
+}
+
+	#eventBuilder .eb-cmd-card .eb-row.eb-row-compact:has(textarea.eb-cmd-textarea) .eb-row-actions {
+		align-self: flex-start;
+	}
+
+		#eventBuilder .eb-row-compact .field.grow input.text,
+		#eventBuilder .eb-row-compact .field.grow select.select,
+		#eventBuilder .eb-row-compact .field.grow input.num {
+			width: 100%;
+			max-width: 100%;
+		}
+
+/* Event preview outputs */
+#eventBuilder #ebOutput,
+#eventBuilder #ebOutputDataFile,
+#eventBuilder #ebI18nOutput {
+	width: 100%;
+	max-width: 100%;
+	min-width: 0;
+	display: block;
+}
+
+#eventBuilder .eb-row-compact #ebOutput,
+#eventBuilder .eb-row-compact #ebOutputDataFile,
+#eventBuilder .eb-row-compact #ebI18nOutput {
+	width: 100% !important;
+	max-width: 100% !important;
+	min-width: 0 !important;
+}
+
+#eventBuilder .list-card {
+	margin: 12px 0;
+}
+
+#eventBuilder #ebActors > .card,
+#eventBuilder #ebConds > .card,
+#eventBuilder #ebCmds > .card {
+	margin: 14px 0;
+}
+
+#eventBuilder .eb-addbar {
+	border-radius: 12px;
+	padding: 8px 10px;
+	margin-bottom: 12px;
+	border: 2px solid rgba(60,35,20,.18);
+	background: rgba(255,255,255,0.14);
+}
+
+#eventBuilder .eb-row-actions {
+	margin-left: auto;
+	display: flex;
+	gap: 8px;
+	align-items: center;
+	justify-content: flex-end;
+}
+
+	#eventBuilder .eb-row-actions .btn {
+		min-width: 34px;
+		padding: 0 10px;
+	}
+
+#eventBuilder .btn.danger {
+	border-color: rgba(176,58,46,.55);
+	color: var(--sv-bad);
+	background: rgba(176,58,46,.10);
+	font-weight: 900;
+	min-width: 34px;
+	text-align: center;
+}
+
+@media (max-width: 1100px) {
+	#eventBuilder .eb-row-actions {
+		margin-left: 0;
+		width: 100%;
+		justify-content: flex-end;
+	}
+}
+
+/* Steps / Commands rows + groups should use a lighter flat panel,
+   not the global wood-framed .card styling */
+#eventBuilder #ebCmds > .card,
+#eventBuilder #ebCmds .eb-group > .card,
+#eventBuilder #ebCmds .eb-cmd-card,
+#eventBuilder #ebConds > .card,
+#eventBuilder #ebActors > .card {
+	box-shadow: none !important;
+	border: 1px solid rgba(0,0,0,.16) !important;
+	background: rgba(255,255,255,.10) !important;
+}
+
+/* Keep inner command/group areas clean too */
+#eventBuilder #ebCmds .card-body,
+#eventBuilder #ebConds .card-body,
+#eventBuilder #ebActors .card-body {
+	background: rgba(255,255,255,.08) !important;
+}
+
+/* Groups in Steps / Commands: clean flat look */
+#eventBuilder #ebCmds .eb-group-hdr {
+	background: rgba(255,255,255,.10) !important;
+	border-bottom: 1px solid rgba(0,0,0,.10) !important;
+	box-shadow: none !important;
+}
+
+#eventBuilder #ebCmds .eb-group-items {
+	background: rgba(47,126,69,.06) !important;
+	border: 1px solid rgba(0,0,0,.10) !important;
+}
+
+/* ============AdvancedMove only: allow this one command card 
+	to expand/wrap cleanly =============================================*/
+#eventBuilder .eb-cmd-card.eb-cmd-advancedmove .eb-card-row {
+	position: relative;
+}
+
+#eventBuilder .eb-cmd-card.eb-cmd-advancedmove .eb-row.eb-row-compact {
+	flex-wrap: wrap !important;
+	align-items: flex-start !important;
+	padding-right: 96px; /* reserve space for duplicate/delete on top-right */
+}
+
+	#eventBuilder .eb-cmd-card.eb-cmd-advancedmove .eb-row.eb-row-compact > .field,
+	#eventBuilder .eb-cmd-card.eb-cmd-advancedmove .eb-row.eb-row-compact > .eb-drag-handle {
+		flex: 0 0 auto;
+	}
+
+/* keep duplicate/delete pinned top-right */
+#eventBuilder .eb-cmd-card.eb-cmd-advancedmove .eb-row-actions {
+	position: absolute;
+	top: 10px;
+	right: 12px;
+	margin-left: 0;
+	align-self: flex-start;
+	justify-content: flex-end;
+	flex: 0 0 auto;
+	z-index: 2;
+}
+
+/* advanced rows always go below top row */
+#eventBuilder .eb-cmd-card.eb-cmd-advancedmove [data-adv-block] {
+	flex: 1 1 100%;
+	min-width: 100%;
+	order: 1000;
+}
+
+/* each adv row */
+#eventBuilder .eb-cmd-card.eb-cmd-advancedmove [data-adv-row] {
+	width: 100%;
+	display: flex;
+	flex-wrap: nowrap;
+	align-items: center;
+	gap: 6px;
+}
+
+	/* all fields in adv rows */
+	#eventBuilder .eb-cmd-card.eb-cmd-advancedmove [data-adv-row] > .field {
+		flex-direction: row;
+		align-items: center;
+		gap: 4px;
+		margin: 0;
+		min-width: 0;
+	}
+
+		/* column 1: drag handle */
+		#eventBuilder .eb-cmd-card.eb-cmd-advancedmove [data-adv-row] > .field:nth-child(1) {
+			flex: 0 0 34px;
+			min-width: 34px;
+			max-width: 34px;
+		}
+
+		/* column 2: Type */
+		#eventBuilder .eb-cmd-card.eb-cmd-advancedmove [data-adv-row] > .field:nth-child(2) {
+			flex: 0 0 150px;
+			min-width: 150px;
+			max-width: 150px;
+		}
+
+		/* column 3: X or Face */
+		#eventBuilder .eb-cmd-card.eb-cmd-advancedmove [data-adv-row] > .field:nth-child(3) {
+			flex: 0 0 170px;
+			min-width: 170px;
+			max-width: 170px;
+		}
+
+		/* column 4: Y or Ms */
+		#eventBuilder .eb-cmd-card.eb-cmd-advancedmove [data-adv-row] > .field:nth-child(4) {
+			flex: 0 0 140px;
+			min-width: 140px;
+			max-width: 140px;
+		}
+
+		/* column 5: duplicate */
+		#eventBuilder .eb-cmd-card.eb-cmd-advancedmove [data-adv-row] > .field:nth-child(5) {
+			flex: 0 0 52px;
+			min-width: 52px;
+			max-width: 52px;
+		}
+
+		/* column 6: remove */
+		#eventBuilder .eb-cmd-card.eb-cmd-advancedmove [data-adv-row] > .field:nth-child(6) {
+			flex: 0 0 52px;
+			min-width: 52px;
+			max-width: 52px;
+		}
+
+	/* labels */
+	#eventBuilder .eb-cmd-card.eb-cmd-advancedmove [data-adv-row] .field > label {
+		width: 30px;
+		min-width: 30px;
+		margin: 0;
+		white-space: nowrap;
+	}
+
+	/* no label width for drag/dup/remove */
+	#eventBuilder .eb-cmd-card.eb-cmd-advancedmove [data-adv-row] > .field:nth-child(1) > label,
+	#eventBuilder .eb-cmd-card.eb-cmd-advancedmove [data-adv-row] > .field:nth-child(5) > label,
+	#eventBuilder .eb-cmd-card.eb-cmd-advancedmove [data-adv-row] > .field:nth-child(6) > label {
+		width: 0;
+		min-width: 0;
+	}
+
+	/* inputs */
+	#eventBuilder .eb-cmd-card.eb-cmd-advancedmove [data-adv-row] input.text,
+	#eventBuilder .eb-cmd-card.eb-cmd-advancedmove [data-adv-row] input.num,
+	#eventBuilder .eb-cmd-card.eb-cmd-advancedmove [data-adv-row] select.select {
+		height: 26px;
+		padding: 4px 6px;
+		font-size: 12px;
+		width: 100%;
+		max-width: 100%;
+	}
+
+	/* buttons */
+	#eventBuilder .eb-cmd-card.eb-cmd-advancedmove [data-adv-row] .btn,
+	#eventBuilder .eb-cmd-card.eb-cmd-advancedmove [data-adv-row] .btn.danger {
+		min-width: 34px;
+		padding: 0 8px;
+	}
+
+#eventBuilder .eb-cmd-card.eb-cmd-advancedmove .adv-drag-handle {
+	cursor: grab;
+}
+
+	#eventBuilder .eb-cmd-card.eb-cmd-advancedmove .adv-drag-handle:active {
+		cursor: grabbing;
+	}
+
+
+/* ==========================================================
+   Export Mod (scoped)
+   ========================================================== */
+#exportMod .card-hdr {
+	cursor: pointer;
+	user-select: none;
+	position: relative;
+	padding-right: 34px;
+}
+
+	#exportMod .card-hdr::after {
+		content: "▾";
+		position: absolute;
+		right: 12px;
+		top: 50%;
+		transform: translateY(-50%);
+		opacity: .75;
+		font-size: 14px;
+	}
+
+#exportMod .card[data-collapsed="true"] > .card-hdr::after {
+	content: "▸";
+}
+
+#exportMod .card[data-collapsed="true"] > .card-body {
+	display: none;
+}
+
+
+/* ============ addTemporaryActor: allow clean wrapped second row ============ */
+#eventBuilder .eb-cmd-card.eb-cmd-addtemporaryactor .eb-card-row {
+	position: relative;
+}
+
+#eventBuilder .eb-cmd-card.eb-cmd-addtemporaryactor .eb-row.eb-row-compact {
+	flex-wrap: wrap !important;
+	align-items: flex-start !important;
+	padding-right: 96px; /* reserve space for duplicate/delete on top-right */
+}
+
+	#eventBuilder .eb-cmd-card.eb-cmd-addtemporaryactor .eb-row.eb-row-compact > .field,
+	#eventBuilder .eb-cmd-card.eb-cmd-addtemporaryactor .eb-row.eb-row-compact > .eb-drag-handle {
+		flex: 0 0 auto;
+	}
+
+/* keep duplicate/delete pinned top-right */
+#eventBuilder .eb-cmd-card.eb-cmd-addtemporaryactor .eb-row-actions {
+	position: absolute;
+	top: 10px;
+	right: 12px;
+	margin-left: 0;
+	align-self: flex-start;
+	justify-content: flex-end;
+	flex: 0 0 auto;
+	z-index: 2;
+}
+
+/* forced second row */
+#eventBuilder .eb-cmd-card.eb-cmd-addtemporaryactor [data-tempactor-block] {
+	flex: 1 1 100%;
+	min-width: 100%;
+	order: 1000;
+}
+
+#eventBuilder .eb-cmd-card.eb-cmd-addtemporaryactor [data-tempactor-row] {
+	width: 100%;
+	display: flex;
+	flex-wrap: nowrap;
+	align-items: center;
+	gap: 6px;
+}
+
+
+	#eventBuilder .eb-cmd-card.eb-cmd-addtemporaryactor [data-tempactor-row] > .field {
+		flex-direction: row;
+		align-items: center;
+		gap: 4px;
+		margin: 0;
+		min-width: 0;
+	}
+
+		/* Direction */
+		#eventBuilder .eb-cmd-card.eb-cmd-addtemporaryactor [data-tempactor-row] > .field:nth-child(1) {
+			flex: 0 0 170px;
+			min-width: 170px;
+			max-width: 170px;
+		}
+
+		/* Breather */
+		#eventBuilder .eb-cmd-card.eb-cmd-addtemporaryactor [data-tempactor-row] > .field:nth-child(2) {
+			flex: 0 0 170px;
+			min-width: 170px;
+			max-width: 170px;
+		}
+
+		/* Override Name */
+		#eventBuilder .eb-cmd-card.eb-cmd-addtemporaryactor [data-tempactor-row] > .field:nth-child(3) {
+			flex: 1 1 320px;
+			min-width: 320px;
+		}
+
+	/* labels */
+	#eventBuilder .eb-cmd-card.eb-cmd-addtemporaryactor [data-tempactor-row] .field > label {
+		width: 78px;
+		min-width: 78px;
+		margin: 0;
+		white-space: nowrap;
+	}
+
+	/* inputs */
+	#eventBuilder .eb-cmd-card.eb-cmd-addtemporaryactor [data-tempactor-row] input.text,
+	#eventBuilder .eb-cmd-card.eb-cmd-addtemporaryactor [data-tempactor-row] input.num,
+	#eventBuilder .eb-cmd-card.eb-cmd-addtemporaryactor [data-tempactor-row] select.select {
+		height: 26px;
+		padding: 4px 6px;
+		font-size: 12px;
+		width: 100%;
+		max-width: 100%;
+	}
+/* ==========================================================
+   Command dropdown (GLOBAL)
+   tool.js creates <div class="cmd-dd"> attached to body.
+   ========================================================== */
+.cmd-dd {
+	display: none;
+	position: fixed;
+	z-index: 99999;
+	max-height: 360px;
+	overflow-y: auto;
+	border-radius: 14px;
+	border: 3px solid rgba(60,35,20,.55);
+	background: linear-gradient(180deg, rgba(246,237,215,.98), rgba(239,224,191,.98));
+	box-shadow: 0 18px 40px rgba(0,0,0,.35);
+	color: var(--sv-text);
+}
+
+	.cmd-dd.open {
+		display: block;
+	}
+
+.cmd-dd-row {
+	padding: 10px 14px;
+	cursor: pointer;
+	border-bottom: 1px solid rgba(60,35,20,.18);
+}
+
+	.cmd-dd-row:last-child {
+		border-bottom: none;
+	}
+
+	.cmd-dd-row:hover,
+	.cmd-dd-row.active {
+		background: rgba(47,126,69,.15);
+	}
+
+.cmd-dd-cmd {
+	font-weight: 900;
+}
+
+.cmd-dd-desc {
+	font-size: 12px;
+	opacity: .85;
+	margin-top: 3px;
+}
+
+.cmd-dd-empty {
+	padding: 10px 14px;
+	opacity: .75;
+}
+
+/* =========================
+   Event Builder Groups + Drag/Drop (scoped)
+   ========================= */
+#eventBuilder .eb-drag-handle {
+	min-width: 34px;
+	padding: 0 10px;
+	cursor: grab;
+	font-weight: 900;
+	user-select: none;
+}
+
+	#eventBuilder .eb-drag-handle:active {
+		cursor: grabbing;
+	}
+
+#eventBuilder .eb-group {
+	margin: 12px 0;
+}
+
+	#eventBuilder .eb-group .card {
+		border: 1px solid rgba(0,0,0,.18);
+	}
+
+#eventBuilder .eb-group-hdr {
+	background: rgba(255,255,255,0.10);
+	border-radius: 12px;
+	border-bottom: 1px solid rgba(0,0,0,.10);
+}
+
+#eventBuilder .eb-group-toggle {
+	min-width: 34px;
+	padding: 0 10px;
+	font-weight: 900;
+}
+
+#eventBuilder .eb-group-name,
+#eventBuilder .eb-group-desc,
+#eventBuilder .eb-group-addcmd {
+	min-width: 0 !important;
+}
+
+	#eventBuilder .eb-group-name input.text {
+		min-width: 0;
+		width: 100%;
+		max-width: 100%;
+		font-weight: 900;
+		font-size: 16px;
+		letter-spacing: .3px;
+	}
+
+#eventBuilder .eb-group-items {
+	margin-left: 18px;
+	padding: 8px 10px 10px 12px;
+	border-left: 2px dashed rgba(60,35,20,.25);
+	background: rgba(47,126,69,.06);
+	border-radius: 12px;
+	margin-top: 6px;
+}
+
+#eventBuilder .eb-dropzone {
+	margin: 10px 0;
+	border-radius: 12px;
+	border: 2px dashed rgba(60,35,20,.25);
+	background: rgba(255,255,255,0.10);
+}
+
+#eventBuilder .eb-drop {
+	outline: 3px solid rgba(47,126,69,.45);
+	outline-offset: 2px;
+}
+
+#eventBuilder .eb-group .eb-cmd-card {
+	box-shadow: 0 1px 0 rgba(0,0,0,.08);
+}
+
+#eventBuilder .eb-group-hdr .eb-row.eb-row-compact {
+	flex-wrap: nowrap !important;
+	align-items: flex-end !important;
+	gap: 6px 8px !important;
+}
+
+#eventBuilder .eb-group-hdr .eb-group-desc input.text,
+#eventBuilder .eb-group-hdr .eb-group-addcmd input.text {
+	min-width: 0 !important;
+	width: 100% !important;
+	max-width: 100% !important;
+}
+
+#eventBuilder .eb-group-hdr .eb-row-actions {
+	flex: 0 0 auto;
+	gap: 6px;
+	margin-left: auto;
+}
+
+/* ==========================================================
+   Modal host + base modal
+   ========================================================== */
+#ebModalHost .eb-modal-backdrop {
+	position: fixed;
+	inset: 0;
+	background: rgba(0,0,0,.45);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 999999;
+}
+
+#ebModalHost .eb-modal {
+	width: min(980px, calc(100vw - 24px));
+	height: auto;
+	max-height: calc(100vh - 24px);
+	overflow: hidden;
+	border-radius: 18px;
+	background: var(--sv-paper);
+	border: 1px solid rgba(0,0,0,.22);
+	box-shadow: 0 24px 60px rgba(0,0,0,.35);
+	display: flex;
+	flex-direction: column;
+}
+
+#ebModalHost .eb-modal-hdr {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 12px 14px;
+	background: linear-gradient(180deg, rgba(185,130,77,.35), rgba(185,130,77,.18));
+	border-bottom: 1px solid rgba(0,0,0,.15);
+}
+
+#ebModalHost .eb-modal-title {
+	font-weight: 800;
+	font-size: 16px;
+}
+
+#ebModalHost .eb-modal-body {
+	padding: 12px 14px;
+	overflow: auto;
+}
+
+#ebModalHost .eb-modal-actions {
+	padding: 12px 14px;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	border-top: 1px solid rgba(0,0,0,.12);
+	background: rgba(0,0,0,.03);
+}
+
+/* ==========================================================
+   Event Builder - Map Picker modal
+   ========================================================== */
+#ebModalHost .eb-modal.eb-map-picker {
+	width: calc(100vw - 24px);
+	height: calc(100vh - 24px);
+	max-height: calc(100vh - 24px);
+}
+
+	#ebModalHost .eb-modal.eb-map-picker .eb-modal-body {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		overflow: hidden;
+		flex: 1 1 auto;
+	}
+
+	#ebModalHost .eb-modal.eb-map-picker .eb-map-viewport {
+		flex: 1 1 auto;
+		overflow: auto;
+		border: 1px solid rgba(0,0,0,.18);
+		border-radius: 12px;
+		background: rgba(0,0,0,.03);
+		min-height: 0;
+	}
+
+	#ebModalHost .eb-modal.eb-map-picker .eb-map-stage {
+		transform-origin: 0 0;
+	}
+
+	#ebModalHost .eb-modal.eb-map-picker canvas[data-k="canvas"] {
+		display: block;
+		image-rendering: pixelated;
+	}
+
+	#ebModalHost .eb-modal.eb-map-picker .eb-map-viewport.is-panning {
+		cursor: grabbing;
+	}
+
+	#ebModalHost .eb-modal.eb-map-picker .eb-map-viewport {
+		cursor: default;
+	}
+
+
+
+/* ==========================================================
+   Sidebar Project Section
+   Uses same visual language as left nav
+   ========================================================== */
+.project-current-wrap {
+	padding: 8px 10px;
+	border-radius: 12px;
+	background: linear-gradient(180deg, rgba(246,237,215,.70), rgba(239,224,191,.70));
+	border: 2px solid rgba(60,35,20,.25);
+	box-shadow: inset 0 1px 0 rgba(255,255,255,.65);
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	margin-bottom: 4px;
+}
+
+.project-current-label {
+	font-size: 11px;
+	font-weight: 900;
+	letter-spacing: .4px;
+	text-transform: uppercase;
+	color: rgba(43,26,16,.75);
+}
+
+.project-current-name {
+	font-weight: 900;
+	font-size: 15px;
+	line-height: 1.2;
+	word-break: break-word;
+	color: var(--sv-text);
+}
+
+.project-current-meta {
+	line-height: 1.25;
+	word-break: break-word;
+}
+
+.project-actions-nav {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.project-nav-btn {
+	width: 100%;
+	text-align: left;
+	font: inherit;
+	cursor: pointer;
+}
+
+	.project-nav-btn:disabled {
+		opacity: .6;
+		cursor: not-allowed;
+	}
+
+
+/* Reuse Event Builder modal look for app-level project dialogs */
+#appModalHost .eb-modal-backdrop {
+	position: fixed;
+	inset: 0;
+	background: rgba(0,0,0,.45);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 999998;
+}
+
+#appModalHost .eb-modal {
+	width: min(860px, calc(100vw - 24px));
+	max-height: calc(100vh - 24px);
+	display: flex;
+	flex-direction: column;
+	border-radius: 18px;
+	overflow: hidden;
+	background: var(--sv-paper);
+	border: 1px solid rgba(0,0,0,.20);
+	box-shadow: 0 24px 60px rgba(0,0,0,.35);
+}
+
+#appModalHost .eb-modal-hdr {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 12px 14px;
+	background: linear-gradient(180deg, rgba(185,130,77,.35), rgba(185,130,77,.18));
+	border-bottom: 1px solid rgba(0,0,0,.15);
+}
+
+#appModalHost .eb-modal-title {
+	font-weight: 900;
+	font-size: 16px;
+}
+
+#appModalHost .eb-modal-body {
+	padding: 12px 14px;
+	overflow: auto;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+#appModalHost .eb-modal-actions {
+	padding: 12px 14px;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	border-top: 1px solid rgba(0,0,0,.12);
+	background: rgba(0,0,0,.03);
+}
+
+.nav-link.disabled {
+	opacity: .5;
+	filter: grayscale(.35);
+	cursor: not-allowed;
+	pointer-events: auto;
+}
+
+	.nav-link.disabled:hover {
+		transform: none;
+		border-color: rgba(60,35,20,.25);
+	}
+
+
+
+
+
+
+
+/* =========================
+   Global Back to top button
+   ========================= */
+.back-to-top {
+	position: fixed;
+	right: 18px;
+	/* lift above footer */
+	bottom: 70px;
+	/* ensure it sits above footer */
+	z-index: 1000;
+	min-width: 46px;
+	height: 46px;
+	padding: 0 14px;
+	border: 2px solid rgba(60,35,20,.50);
+	border-radius: 999px;
+	background: linear-gradient(180deg, rgba(255,255,255,.25), rgba(255,255,255,0)), linear-gradient(180deg, var(--sv-woodA), var(--sv-woodB));
+	color: var(--sv-text);
+	box-shadow: 0 6px 18px rgba(0,0,0,.24);
+	cursor: pointer;
+	font-size: 22px;
+	font-weight: 900;
+	line-height: 1;
+	opacity: 0;
+	transform: translateY(8px);
+	pointer-events: none;
+	transition: opacity .18s ease, transform .18s ease, filter .12s ease;
+}
+
+	.back-to-top:hover {
+		filter: brightness(1.04);
+	}
+
+	.back-to-top:active {
+		transform: translateY(9px);
+	}
+
+	.back-to-top.is-visible {
+		opacity: 1;
+		transform: translateY(0);
+		pointer-events: auto;
+	}

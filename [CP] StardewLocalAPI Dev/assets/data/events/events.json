@@ -1,0 +1,12 @@
+﻿{
+  "Changes": [
+    {
+      "LogName": "SLAPI Placeholder Event",
+      "Action": "EditData",
+      "Target": "Data/Events/Town",
+      "Entries": {
+        "{modid}.PlaceHolderEvent/Year 99999": "none/23 23/Haley 29 23 2 farmer 17 23 0 Abigail 26 18 2/end"
+      }
+    }
+  ]
+}

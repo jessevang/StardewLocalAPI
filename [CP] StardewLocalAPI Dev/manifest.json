@@ -1,0 +1,12 @@
+{
+  "Name": "[CP] StardewLocalAPI Dev",
+  "Author": "Darkmushu1",
+  "Version": "1.0.0",
+  "Description": "Development Content Patcher pack used by StardewLocalAPI for live testing and reloading.",
+  "UniqueID": "Darkmushu1.StardewLocalAPI.DevContent",
+  "MinimumApiVersion": "4.0.0",
+  "ContentPackFor": {
+    "UniqueID": "Pathoschild.ContentPatcher"
+  },
+  "UpdateKeys": []
+}

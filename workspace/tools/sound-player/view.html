@@ -1,0 +1,45 @@
+﻿<div class="tool-host">
+    <div class="card">
+        <div class="card-hdr">
+            Sound Player
+            <span id="spStatus" class="pill warn" style="margin-left:10px;">—</span>
+        </div>
+
+        <div class="card-body">
+            <div class="row" style="justify-content:space-between; align-items:flex-end;">
+                <div class="field grow">
+                    <label class="lbl">Search</label>
+                    <input id="spSearch" class="text" placeholder="sfx id, category…" />
+                </div>
+
+                <div class="row">
+                    <button id="spRefresh" class="btn" type="button">Refresh</button>
+                    <button id="spStop" class="btn" type="button">Stop</button>
+                    <button id="spResume" class="btn" type="button">Resume</button>
+                </div>
+            </div>
+
+            <div class="hr"></div>
+
+            <div class="app-shell" style="min-height: 640px;">
+                <div class="app-nav" style="border-right:1px solid var(--border);">
+                    <div class="nav-title" id="spGroupTitle">—</div>
+                    <div id="spGroups"></div>
+                </div>
+
+                <div class="app-main" style="padding:0;">
+                    <div style="padding:12px 14px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center;">
+                        <div style="font-weight:800;" id="spListTitle">—</div>
+                        <div style="display:flex; gap:10px; align-items:center;">
+                            <div class="muted small">Selected:</div>
+                            <div id="spActionsTitle" style="font-weight:700;">—</div>
+                            <button id="spPlaySelected" class="btn primary" type="button" disabled>Play</button>
+                        </div>
+                    </div>
+
+                    <div id="spList" style="padding: 12px 14px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

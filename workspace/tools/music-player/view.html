@@ -1,0 +1,58 @@
+﻿<div class="tool-host">
+    <div class="card">
+        <div class="card-hdr">
+            Music Player
+            <span id="mpStatus" class="pill warn" style="margin-left:10px;">—</span>
+        </div>
+
+        <div class="card-body">
+            <div class="row" style="justify-content:space-between; align-items:flex-end;">
+                <div class="field grow">
+                    <label class="lbl">Search</label>
+                    <input id="mpSearch" class="text" placeholder="music id, event, location…" />
+                </div>
+
+                <div class="row">
+                    <button id="mpRefresh" class="btn" type="button">Refresh</button>
+                    <button id="mpStop" class="btn" type="button">Stop</button>
+                    <button id="mpResume" class="btn" type="button">Resume</button>
+                </div>
+            </div>
+
+            <div class="hr"></div>
+
+            <div class="row" style="justify-content:space-between; align-items:flex-end;">
+                <div class="field" style="min-width:220px;">
+                    <label class="lbl">View</label>
+                    <select id="mpView" class="select">
+                        <option value="music">Music</option>
+                        <option value="events">By Events</option>
+                        <option value="locations">By Locations</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="hr"></div>
+
+            <div class="app-shell" style="min-height: 640px;">
+                <div class="app-nav" style="border-right:1px solid var(--border);">
+                    <div class="nav-title" id="mpGroupTitle">—</div>
+                    <div id="mpGroups"></div>
+                </div>
+
+                <div class="app-main" style="padding:0;">
+                    <div style="padding:12px 14px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center;">
+                        <div style="font-weight:800;" id="mpListTitle">—</div>
+                        <div style="display:flex; gap:10px; align-items:center;">
+                            <div class="muted small">Selected:</div>
+                            <div id="mpActionsTitle" style="font-weight:700;">—</div>
+                            <button id="mpPlaySelected" class="btn primary" type="button" disabled>Play</button>
+                        </div>
+                    </div>
+
+                    <div id="mpList" style="padding: 12px 14px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

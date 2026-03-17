@@ -1,0 +1,59 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Modules - Copy\**" />
+    <EmbeddedResource Remove="Modules - Copy\**" />
+    <None Remove="Modules - Copy\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Lib.Harmony" Version="2.3.3" />
+    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="4.3.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="SkiaSharp">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Stardew Valley\SkiaSharp.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="workspace\**\*.*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="presets\images\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="presets\groupPresets.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <Target Name="PostBuildCopy" AfterTargets="Build" Condition="Exists('$(MSBuildProjectDirectory)\[CP] StardewLocalAPI Dev')">
+    <PropertyGroup>
+      <GameModsPath>C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\Mods</GameModsPath>
+      <CpSourcePath>$(MSBuildProjectDirectory)\[CP] StardewLocalAPI Dev</CpSourcePath>
+      <CpDestPath>$(GameModsPath)\[CP] StardewLocalAPI Dev</CpDestPath>
+    </PropertyGroup>
+
+    <MakeDir Directories="$(CpDestPath)" />
+
+    <ItemGroup>
+      <CpFiles Include="$(CpSourcePath)\**\*.*" />
+    </ItemGroup>
+
+    <Copy SourceFiles="@(CpFiles)" DestinationFiles="@(CpFiles->'$(CpDestPath)\%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
+  </Target>
+
+</Project>
+

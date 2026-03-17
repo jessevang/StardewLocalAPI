@@ -1,0 +1,336 @@
+<div id="eventBuilder" class="tool-host">
+
+    <!-- Sticky Action Bar (ONLY this sticks) -->
+    <div class="eb-sticky">
+        <div class="card">
+            <div class="card-body" style="padding:10px 12px;">
+                <div class="row eb-row" style="gap:8px; align-items:center; width:100%;">
+                    <!-- Left group -->
+                    <div class="row eb-row" style="gap:8px; align-items:center;">
+
+                        <div style="font-weight:900; font-size:16px; letter-spacing:.2px; margin-right:6px;">
+                            Event Builder
+                        </div>
+
+                        <div class="tooltip-wrap">
+                            <button class="btn" id="ebBtnNew" type="button">New</button>
+                            <div class="tooltip">
+                                <b>New Event</b><br><br>
+                                Clears the current builder and starts a new event.<br><br>
+                                Use this when beginning a new event script.
+                            </div>
+                        </div>
+
+                        <div class="tooltip-wrap">
+                            <button id="ebBtnEventList" class="btn" type="button">Event List</button>
+                            <div class="tooltip">
+                                <b>Event List</b><br><br>
+                                Opens the list of events in the current project.<br><br>
+                                Use this to switch to another event you are working on.
+                            </div>
+                        </div>
+
+
+
+                        <span id="ebProgressPill" class="pill" title="Progress state">progress: —</span>
+
+                        <!-- STATUS (tool-local) moved into Sticky Action Bar -->
+                        <span id="ebStatus" class="pill warn" title="Event Builder status">
+                            <span id="ebStatusText">Not connected</span>
+                            <span class="muted" style="margin:0 6px;">•</span>
+                            <span id="ebServerInfo" class="muted small">—</span>
+                        </span>
+                    </div>
+
+                    <div class="spacer"></div>
+
+                    <!-- Right group -->
+                    <div class="row eb-row" style="gap:8px; align-items:center; overflow:visible;">
+
+
+                        <div class="tooltip-wrap">
+                            <button id="ebBtnRun"
+                                    class="btn"
+                                    type="button">
+                                Run
+                            </button>
+
+                            <div class="tooltip">
+                                <b>Run Event</b><br><br>
+                                Runs the event script directly in-game.<br>
+                                Ignores event preconditions and starts immediately.<br><br>
+                                Best for rapid event testing while building.
+                            </div>
+                        </div>
+
+                        <div class="tooltip-wrap">
+                            <button id="ebBtnRunCp"
+                                    class="btn primary"
+                                    type="button">
+                                Run CP
+                            </button>
+
+                            <div class="tooltip">
+                                <b>Run via Content Patcher</b><br><br>
+                                Generates a Content Patcher files to replace "[CP] StardewLocalAPI Dev".<br><br>
+
+                                The content patcher's reload command is copied automatically.<br>
+                                Paste it into the SMAPI console and press enter to reload the pack.<br><br>
+                                Click <b>Run CP</b> again to test the event with its preconditions required.<br>
+
+                            </div>
+                        </div>
+
+                        <div class="tooltip-wrap">
+                            <button id="ebBtnEnd"
+                                    class="btn"
+                                    type="button">
+                                End
+                            </button>
+
+                            <div class="tooltip">
+                                <b>End Current Event</b><br><br>
+                                Ends the event that is currently running in-game.<br><br>
+                                Use this if an event gets stuck, loops, or you want to stop testing early.
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden file input for Load -->
+    <datalist id="eb-dl-music"></datalist>
+    <datalist id="eb-dl-objects"></datalist>
+    <input id="ebProgressFileInput" type="file" accept="application/json" style="display:none;" />
+
+    <!-- Manifest (NOT STICKY; scrolls normally) -->
+    <div class="card" style="margin-top:12px;">
+        <div class="card-hdr">manifest.json</div>
+        <div class="card-body">
+
+            <div class="muted small" style="margin-bottom:10px;">
+                Paste/edit your <code>manifest.json</code>. The tool reads <code>UniqueID</code> and will prefix your Event ID as <code>UniqueID.EventId</code>.
+            </div>
+
+            <div class="row eb-row" style="gap:10px; align-items:center; margin-bottom:10px;">
+                <span id="mfStatus" class="pill" title="Manifest status">UniqueID: —</span>
+                <div class="spacer"></div>
+                <button id="mfBtnCopy" class="btn" type="button">Copy</button>
+                <button id="mfBtnDownload" class="btn" type="button">Download</button>
+            </div>
+
+            <textarea id="mfJson" class="text" spellcheck="false"
+                      style="min-height:260px; width:100%; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace;"></textarea>
+
+        </div>
+    </div>
+
+    <!-- Event Header -->
+    <div class="card" style="margin-top:12px;">
+        <div class="card-hdr">Event Header</div>
+        <div class="card-body">
+
+            <div class="row eb-row">
+                <div class="field">
+                    <label>Location</label>
+                    <select id="ebLocation" class="select"></select>
+                </div>
+
+                <div class="field grow">
+                    <label>Event ID (key)</label>
+                    <input id="ebEventId" class="text" type="text" placeholder="Jacob10HeartEvent" />
+                </div>
+            </div>
+
+            <div class="row eb-row">
+                <div class="field">
+                    <label>Music</label>
+                    <select id="ebMusic" class="select">
+                        <option value="none">none - Stops current music</option>
+                        <option value="continue">continue - Continues current music into event</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label>Viewport X</label>
+                    <input id="ebViewX" class="num" type="number" value="0" />
+                </div>
+
+                <div class="field">
+                    <label>Viewport Y</label>
+                    <input id="ebViewY" class="num" type="number" value="0" />
+                </div>
+
+
+                <div class="field">
+                    <label>&nbsp;</label>
+                    <div class="row eb-row" style="gap:8px;">
+                        <button id="ebBtnPickViewportXY"
+                                class="btn"
+                                type="button">
+                            Pick Viewport X/Y
+                        </button>
+
+                        <div class="tooltip-wrap">
+                            <button id="ebBtnCaptureXY"
+                                    class="btn"
+                                    type="button"
+                                    style="min-width:340px;">
+                                Capture Map X/Y Grid
+                            </button>
+
+                            <div class="tooltip">
+                                <b>Capture Map Coordinates</b><br><br>
+                                Generates a screenshot of the selected Game location<br>
+                                with a grid overlay with X,Y coordinates on each tile.<br><br>
+                                Useful for quickly referencing tile positions when
+                                building events.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Actors -->
+    <div class="card" style="margin-top:12px;">
+        <div class="card-hdr">Actors</div>
+        <div class="card-body">
+            <div class="muted small" style="margin-bottom:10px;">
+                Add any NPCs or the farmer here if you want them to appear in the event scene.
+            </div>
+
+            <div id="ebActors" class="list"></div>
+
+            <div class="row eb-row" style="margin-top:10px;">
+                <button id="ebAddActor" class="btn" type="button">+ Actor</button>
+                <button id="ebAddFarmer" class="btn" type="button">+ Farmer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Preconditions -->
+    <div class="card" style="margin-top:12px;">
+        <div class="card-hdr">Preconditions</div>
+        <div class="card-body">
+
+            <div class="row eb-row">
+                <div class="field grow">
+                    <label>Add precondition</label>
+                    <div class="row eb-row">
+                        <select id="ebCondType" class="select" style="min-width:280px;"></select>
+                        <button id="ebAddCond" class="btn" type="button">Add</button>
+                        <button id="ebClearConds" class="btn" type="button">Clear</button>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="hr"></div>
+            <div id="ebConds" class="list"></div>
+        </div>
+    </div>
+
+    <!-- Steps / Commands -->
+    <div class="card" style="margin-top:12px;">
+        <div class="card-hdr">Steps / Commands</div>
+        <div class="card-body">
+
+            <div class="row eb-row">
+                <div class="field grow">
+                    <label>Add command</label>
+                    <div class="row eb-row">
+                        <input id="ebCmdType" class="text" type="text" list="eb-dl-cmds" autocomplete="off" style="min-width:500px;" />
+                        <button id="ebAddCmd" class="btn" type="button">Add</button>
+                        <button id="ebAddGroup" class="btn" type="button">+ Group</button>
+                        <button id="ebClearCmds" class="btn" type="button">Clear</button>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="hr"></div>
+            <div id="ebCmds" class="list"></div>
+
+        </div>
+    </div>
+
+    <!-- Preview -->
+    <div class="card" style="margin-top:12px;">
+        <div class="card-hdr">Preview</div>
+        <div class="card-body">
+            <div class="row eb-row" style="gap:10px; align-items:end;">
+
+                <div class="field" style="min-width:240px;">
+                    <label>Patch Mode</label>
+                    <select id="ebPatchMode" class="select">
+                        <option value="edit">EditData (existing asset)</option>
+                        <option value="load">Load (create new asset)</option>
+                    </select>
+                </div>
+
+                <div class="tooltip-wrap">
+                    <label class="row eb-row" style="gap:6px; align-items:center; margin-right:4px; white-space:nowrap; cursor:pointer;">
+                        <input id="ebI18nToggle" type="checkbox" />
+                        <span class="small">I18N</span>
+                    </label>
+
+                    <div class="tooltip">
+                        <b>I18N Export</b><br><br>
+                        When enabled, dialogue text in the event is exported to an
+                        <code>i18n/default.json</code> file instead of being written directly
+                        into the event script.<br><br>
+                        Applies to <b>Run CP</b> and <b>Build Preview</b>.
+                    </div>
+                </div>
+
+                <div class="tooltip-wrap">
+                    <label class="row eb-row" style="gap:6px; align-items:center; margin-right:4px; white-space:nowrap; cursor:pointer;">
+                        <input id="ebSplitCpPreview" type="checkbox" />
+                        <span class="small">Split CP Files</span>
+                    </label>
+
+                    <div class="tooltip">
+                        <b>Split CP Preview</b><br><br>
+                        When enabled, Build Preview shows the Content Patcher output as separate files:
+                        <code>content.json</code> and <code>assets/data/events/events.json</code>.<br><br>
+                        Applies to <b>Build Preview</b>, <b>Copy</b>, <b>Download</b>, and <b>Run CP</b>.
+                    </div>
+                </div>
+
+                <button id="ebBtnBuild" class="btn" type="button">Build Preview</button>
+                <button id="ebBtnCopy" class="btn" type="button">Copy</button>
+                <button id="ebBtnDownload" class="btn" type="button">Download</button>
+
+            </div>
+
+            <div class="hr"></div>
+
+            <div style="margin-top:4px;">
+                <label class="small" style="display:block; font-weight:800; margin-bottom:6px;">content.json</label>
+                <textarea id="ebOutput" class="text" spellcheck="false"
+                          style="display:block; min-height:220px; width:100%; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace;"></textarea>
+            </div>
+
+            <div id="ebLoadModeBlock" style="display:none; margin-top:12px;">
+                <div class="hr"></div>
+                <label id="ebOutputDataFileLabel" class="small" style="display:block; font-weight:800; margin-bottom:6px;">
+                    assets/data/events/events.json
+                </label>
+                <textarea id="ebOutputDataFile" class="text" spellcheck="false"
+                          style="display:block; min-height:220px; width:100%; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace;"></textarea>
+            </div>
+
+            <div style="margin-top:12px;">
+                <label id="ebI18nOutputLabel" class="small" style="display:none; font-weight:800; margin-bottom:6px;">i18n/default.json</label>
+                <textarea id="ebI18nOutput" class="text" spellcheck="false"
+                          style="display:none; min-height:220px; width:100%; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace;"></textarea>
+            </div>
+        </div>
+
+    </div>

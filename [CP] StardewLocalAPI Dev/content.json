@@ -1,0 +1,10 @@
+{
+  "Format": "2.9.0",
+  "Changes": [
+    {
+      "LogName": "Events Include",
+      "Action": "Include",
+      "FromFile": "assets/data/events/events.json"
+    }
+  ]
+}

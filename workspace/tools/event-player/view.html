@@ -1,0 +1,30 @@
+<div class="card">
+    <div class="card-hdr">
+        <div style="display:flex; align-items:center; gap:10px;">
+            <div>Event Player</div>
+            <span class="pill warn" id="epStatus">Loading…</span>
+            <div style="flex:1;"></div>
+
+            <div class="seg">
+                <button class="btn" id="epModeLoc" type="button">By Location</button>
+                <button class="btn" id="epModeChar" type="button">By Character</button>
+            </div>
+
+            <input id="epSearch" class="inp" type="text" placeholder="Search events, ids, characters…" style="width:320px;" />
+            <button id="epRefresh" class="btn" type="button">Refresh</button>
+            <button id="epEnd" class="btn" type="button" title="End the currently running event">End</button>
+        </div>
+    </div>
+
+    <div class="card-body" style="display:grid; grid-template-columns: 280px 1fr; gap:14px;">
+        <div class="panel">
+            <div class="muted small" id="epGroupTitle">—</div>
+            <div id="epGroups" class="list"></div>
+        </div>
+
+        <div class="panel">
+            <div class="muted small" id="epListTitle">—</div>
+            <div id="epList" class="list"></div>
+        </div>
+    </div>
+</div>

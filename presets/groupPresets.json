@@ -1,0 +1,137 @@
+﻿[
+  {
+    "id": "user_receive_item",
+    "name": "Receive Item",
+    "description": "Farm Receives an Item",
+    "imageDataUrl": "",
+    "items": [
+      {
+        "type": "pause",
+        "id": "cmd_02",
+        "ms": "500"
+      },
+      {
+        "type": "playSound",
+        "id": "cmd_02",
+        "sound": "dwop"
+      },
+      {
+        "type": "faceDirection",
+        "id": "cmd_02",
+        "actor": "farmer"
+      },
+      {
+        "type": "itemAboveHead",
+        "id": "cmd_02",
+        "raw": "(W)43",
+        "item": "(W)4"
+      },
+      {
+        "type": "pause",
+        "id": "cmd_02",
+        "ms": "3300"
+      },
+      {
+        "type": "addItem",
+        "id": "cmd_02",
+        "item": "(W)4",
+        "count": "1"
+      },
+      {
+        "type": "pause",
+        "id": "cmd_02",
+        "ms": "500"
+      }
+    ]
+  },
+  {
+    "id": "user_intro",
+    "name": "Intro",
+    "description": "Setup scene, loads character, and starts a dialogue",
+    "imageDataUrl": "",
+    "items": [
+      {
+        "type": "viewport",
+        "id": "cmd_01",
+        "targetType": "xy",
+        "x": "999",
+        "y": "999"
+      },
+      {
+        "type": "warp",
+        "id": "cmd_02",
+        "actor": "Haley",
+        "x": "31",
+        "y": "23",
+        "cont": "true"
+      },
+      {
+        "type": "warp",
+        "id": "cmd_03",
+        "actor": "farmer",
+        "x": "17",
+        "y": "23",
+        "cont": "true"
+      },
+      {
+        "type": "addLantern",
+        "id": "cmd_04",
+        "actor": "Abigail",
+        "spriteIndex": "735",
+        "x": "22",
+        "y": "20",
+        "radius": "1"
+      },
+      {
+        "type": "pause",
+        "id": "cmd_05",
+        "ms": "500"
+      },
+      {
+        "type": "viewport",
+        "id": "cmd_06",
+        "targetType": "xy",
+        "x": "23",
+        "y": "23"
+      },
+      {
+        "type": "skippable",
+        "id": "cmd_07"
+      },
+      {
+        "type": "move",
+        "id": "cmd_08",
+        "actor": "Haley",
+        "dx": "-7",
+        "dy": "0",
+        "dir": "3",
+        "cont": "true"
+      },
+      {
+        "type": "move",
+        "id": "cmd_09",
+        "actor": "farmer",
+        "dx": "6",
+        "dy": "0",
+        "dir": "1",
+        "cont": "true"
+      },
+      {
+        "type": "pause",
+        "id": "cmd_10",
+        "ms": "2500"
+      },
+      {
+        "type": "speak",
+        "id": "cmd_11",
+        "actor": "Haley",
+        "text": "Oh, hey it's you @, I forgot to give you this the other day."
+      },
+      {
+        "type": "pause",
+        "id": "cmd_12",
+        "ms": "2000"
+      }
+    ]
+  }
+]
