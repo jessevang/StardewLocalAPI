@@ -1,13 +1,19 @@
 {
   "Name": "StardewLocalAPI",
   "Author": "Darkmushu1",
-  "Version": "0.0.1",
+  "Version": "0.0.2",
   "Description": "Provides local API and mod developer tools",
   "UniqueID": "Darkmushu1.StardewLocalAPI",
   "EntryDll": "StardewLocalAPI.dll",
   "MinimumApiVersion": "4.0.0",
-  "UpdateKeys": ["Nexus:43764"]
- 
+  "UpdateKeys": [ "Nexus:43764" ],
+  "Dependencies": [
+    {
+      "UniqueID": "spacechase0.GenericModConfigMenu",
+      "IsRequired": false
+    }
+  ]
+
 }
 
 

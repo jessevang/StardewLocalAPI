@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using GenericModConfigMenu;
+using HarmonyLib;
 using StardewLocalAPI.Core;
 using StardewLocalAPI.Modules;
 using StardewLocalAPI.Modules.Builders;
@@ -9,6 +10,7 @@ using StardewValley.Monsters;
 using System;
 using System.Diagnostics;
 using System.Threading;
+
 
 namespace StardewLocalAPI
 {
@@ -22,6 +24,7 @@ namespace StardewLocalAPI
         private readonly DialoguePlaybackService _dialoguePlayer = new DialoguePlaybackService();
         private bool _saveLoaded = false;
         private WorkspaceEventsStore? _workspaceEventsStore;
+
 
         public override void Entry(IModHelper helper)
         {
@@ -47,6 +50,8 @@ namespace StardewLocalAPI
                 Monitor.Log("StardewLocalAPI server disabled in config.", LogLevel.Info);
                 return;
             }
+
+            RegisterGenericModConfigMenu();
 
             string token = string.IsNullOrWhiteSpace(_config.Token)
                 ? TokenUtil.GenerateToken(32)
@@ -120,7 +125,9 @@ namespace StardewLocalAPI
             if (!Context.IsPlayerFree)
                 return;
 
-            if (e.Button != SButton.F11)
+
+            
+            if (!_config.OpenWorkspaceKeys.JustPressed())
                 return;
 
             if (_server == null)
@@ -215,6 +222,27 @@ namespace StardewLocalAPI
                 GamePlatform.Mac => RuntimePlatformKind.MacOS,
                 _ => RuntimePlatformKind.Unknown
             };
+        }
+
+        private void RegisterGenericModConfigMenu()
+        {
+            var gmcm = Helper.ModRegistry.GetApi<IGenericModConfigMenuApi>("spacechase0.GenericModConfigMenu");
+            if (gmcm == null)
+                return;
+
+            gmcm.Register(
+                mod: ModManifest,
+                reset: () => _config = new ModConfig(),
+                save: () => Helper.WriteConfig(_config)
+            );
+
+            gmcm.AddKeybindList(
+                mod: ModManifest,
+                name: () => "Open Workspace Key",
+                tooltip: () => "Hotkey(s) used to open the Stardew Local API workspace.",
+                getValue: () => _config.OpenWorkspaceKeys,
+                setValue: value => _config.OpenWorkspaceKeys = value
+            );
         }
     }
 }

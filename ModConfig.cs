@@ -1,4 +1,7 @@
-﻿namespace StardewLocalAPI
+﻿using StardewModdingAPI;
+using StardewModdingAPI.Utilities;
+
+namespace StardewLocalAPI
 {
     public sealed class ModConfig
     {
@@ -17,5 +20,9 @@
         public bool AutoOpenWorkspace { get; set; } = true;
 
         public string WorkspacePath { get; set; } = "workspace/index.html";
+
+        public KeybindList OpenWorkspaceKeys { get; set; } = new(
+            new Keybind(SButton.F11)
+        );
     }
 }
