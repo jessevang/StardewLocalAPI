@@ -16,17 +16,31 @@ namespace StardewLocalAPI.Core
         private readonly bool _enableIpv6;
         private readonly bool _logRequests;
         private readonly int _maxRps;
+        private readonly RuntimePlatformKind _platform;
+
         private DateTime _rateWindow = DateTime.UtcNow;
         private int _rateCount = 0;
         private Thread? _thread;
         private volatile bool _running;
         private volatile bool _saveLoaded;
+
         public int Port { get; private set; }
         public string TokenForClient => _token;
         public bool IsSaveLoaded => _saveLoaded;
         public void SetSaveLoaded(bool loaded) => _saveLoaded = loaded;
+
         private string WorkspaceRoot => Path.Combine(_helper.DirectoryPath, "workspace");
-        public DevServer(IMonitor monitor, IModHelper helper, ApiRouter router, int port, string token, bool enableIpv6, bool logRequests, int maxRps)
+
+        public DevServer(
+            IMonitor monitor,
+            IModHelper helper,
+            ApiRouter router,
+            int port,
+            string token,
+            bool enableIpv6,
+            bool logRequests,
+            int maxRps,
+            RuntimePlatformKind platform)
         {
             _monitor = monitor;
             _helper = helper;
@@ -37,6 +51,7 @@ namespace StardewLocalAPI.Core
             _enableIpv6 = enableIpv6;
             _logRequests = logRequests;
             _maxRps = Math.Max(1, maxRps);
+            _platform = platform;
         }
 
         public void Start()
@@ -46,11 +61,34 @@ namespace StardewLocalAPI.Core
             if (Port == 0)
                 Port = PortUtil.FindFreeLoopbackPort();
 
-            _listener.Prefixes.Add($"http://127.0.0.1:{Port}/");
-            if (_enableIpv6)
+            if (Port < 1 || Port > 65535)
+                throw new InvalidOperationException($"Invalid DevServer port: {Port}");
+
+            _listener.Prefixes.Clear();
+
+            string ipv4Prefix = $"http://127.0.0.1:{Port}/";
+            _listener.Prefixes.Add(ipv4Prefix);
+
+            bool allowIpv6 = _enableIpv6 && _platform == RuntimePlatformKind.Windows;
+            if (allowIpv6)
                 _listener.Prefixes.Add($"http://[::1]:{Port}/");
 
-            _listener.Start();
+            _monitor.Log($"Detected platform: {_platform}", LogLevel.Info);
+            _monitor.Log($"Attempting to start dev server on: {ipv4Prefix}", LogLevel.Info);
+
+            foreach (string prefix in _listener.Prefixes)
+                _monitor.Log($"HttpListener prefix: {prefix}", LogLevel.Trace);
+
+            try
+            {
+                _listener.Start();
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Dev server failed to start on port {Port}: {ex}", LogLevel.Error);
+                throw;
+            }
+
             _running = true;
 
             _thread = new Thread(ListenLoop)
@@ -60,7 +98,7 @@ namespace StardewLocalAPI.Core
             };
             _thread.Start();
 
-            _monitor.Log($"Dev server listening on http://127.0.0.1:{Port}/", LogLevel.Info);
+            _monitor.Log($"Dev server listening on {ipv4Prefix}", LogLevel.Info);
             _monitor.Log($"Workspace root: {WorkspaceRoot}", LogLevel.Trace);
         }
 
@@ -100,25 +138,19 @@ namespace StardewLocalAPI.Core
                 ".html" => "text/html; charset=utf-8",
                 ".htm" => "text/html; charset=utf-8",
                 ".css" => "text/css; charset=utf-8",
-
-  
                 ".js" => "application/javascript; charset=utf-8",
                 ".mjs" => "application/javascript; charset=utf-8",
-
                 ".json" => "application/json; charset=utf-8",
                 ".map" => "application/json; charset=utf-8",
-
                 ".png" => "image/png",
                 ".jpg" => "image/jpeg",
                 ".jpeg" => "image/jpeg",
                 ".gif" => "image/gif",
                 ".svg" => "image/svg+xml",
                 ".ico" => "image/x-icon",
-
                 ".woff" => "font/woff",
                 ".woff2" => "font/woff2",
                 ".ttf" => "font/ttf",
-
                 ".txt" => "text/plain; charset=utf-8",
                 _ => "application/octet-stream"
             };
@@ -136,12 +168,14 @@ namespace StardewLocalAPI.Core
                     http.Response.OutputStream.Close();
                     return;
                 }
+
                 var now = DateTime.UtcNow;
                 if ((now - _rateWindow).TotalSeconds >= 1)
                 {
                     _rateWindow = now;
                     _rateCount = 0;
                 }
+
                 _rateCount++;
                 if (_rateCount > _maxRps)
                 {
@@ -153,6 +187,7 @@ namespace StardewLocalAPI.Core
 
                 if (_logRequests)
                     _monitor.Log($"{http.Request.HttpMethod} {path}", LogLevel.Trace);
+
                 if (path.Equals("/", StringComparison.Ordinal))
                 {
                     http.Response.StatusCode = 302;
@@ -166,6 +201,7 @@ namespace StardewLocalAPI.Core
                     ServeWorkspaceFile(http);
                     return;
                 }
+
                 if (path.StartsWith("/api/", StringComparison.OrdinalIgnoreCase))
                 {
                     string? headerToken = http.Request.Headers["X-Devtools-Token"]?.Trim();
@@ -178,6 +214,7 @@ namespace StardewLocalAPI.Core
                         return;
                     }
                 }
+
                 var ctx = new ApiContext(http, _monitor, _helper);
                 if (_router.TryRoute(ctx, out var handler))
                 {
@@ -231,7 +268,6 @@ namespace StardewLocalAPI.Core
 
                 http.Response.StatusCode = 200;
                 http.Response.ContentType = GetContentType(fullPath);
-
                 http.Response.Headers["Cache-Control"] = "no-store, max-age=0";
                 http.Response.Headers["Pragma"] = "no-cache";
 

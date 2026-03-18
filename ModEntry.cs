@@ -14,6 +14,7 @@ namespace StardewLocalAPI
 {
     public sealed class ModEntry : Mod
     {
+        private RuntimePlatformKind _runtimePlatform = RuntimePlatformKind.Unknown;
         private ModConfig _config = null!;
         private DevServer? _server;
         private readonly GameActionQueue _actions = new();
@@ -25,6 +26,9 @@ namespace StardewLocalAPI
         public override void Entry(IModHelper helper)
         {
             _config = helper.ReadConfig<ModConfig>();
+
+            _runtimePlatform = DetectRuntimePlatform();
+            Monitor.Log($"StardewLocalAPI detected runtime platform: {_runtimePlatform}", LogLevel.Info);
 
             _harmony = new Harmony(this.ModManifest.UniqueID);
             _harmony.PatchAll();
@@ -90,7 +94,8 @@ namespace StardewLocalAPI
                 token: token,
                 enableIpv6: _config.EnableIpv6Loopback,
                 logRequests: _config.LogRequests,
-                maxRps: _config.MaxRequestsPerSecond
+                maxRps: _config.MaxRequestsPerSecond,
+                platform: _runtimePlatform
             );
 
             _server.Start();
@@ -199,6 +204,17 @@ namespace StardewLocalAPI
             {
                 Monitor.Log($"Failed to open workspace: {ex}", LogLevel.Warn);
             }
+        }
+
+        private RuntimePlatformKind DetectRuntimePlatform()
+        {
+            return Constants.TargetPlatform switch
+            {
+                GamePlatform.Windows => RuntimePlatformKind.Windows,
+                GamePlatform.Linux => RuntimePlatformKind.Linux,
+                GamePlatform.Mac => RuntimePlatformKind.MacOS,
+                _ => RuntimePlatformKind.Unknown
+            };
         }
     }
 }
